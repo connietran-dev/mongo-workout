@@ -17,6 +17,9 @@ const newWorkout = document.querySelector(".new-workout")
 let workoutType = null;
 let shouldNavigateAway = false;
 
+
+/** Create a Workout if it does not yet exist **/ 
+
 async function initExercise() {
   let workout;
 
@@ -37,6 +40,9 @@ async function initExercise() {
 }
 
 initExercise();
+
+
+/** Form Functions **/
 
 function handleWorkoutTypeChange(event) {
   workoutType = event.target.value;
@@ -100,6 +106,9 @@ function validateInputs() {
     addButton.setAttribute("disabled", true);
   }
 }
+
+
+/** Create new Exercise on Submit**/
 
 async function handleFormSubmit(event) {
   event.preventDefault();

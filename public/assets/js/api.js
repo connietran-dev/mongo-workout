@@ -13,20 +13,22 @@ const API = {
 
     return json[json.length - 1];
   },
+
   async addExercise(data) {
     const id = location.search.split("=")[1];
+    console.log("Current workout ID: ", id);
 
     const res = await fetch("/api/workouts/" + id, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
-    console.log("addExercise: ", res);
+    console.log("Response from addExercise PUT: ", res);
 
     const json = await res.json();
-
     return json;
   },
+  
   async createWorkout(data = {}) {
     const res = await fetch("/api/workouts", {
       method: "POST",
@@ -38,6 +40,7 @@ const API = {
     const json = await res.json();
     return json;
   },
+  
   async getWorkoutsInRange() {
     const res = await fetch(`/api/workouts/range`);
     console.log("getWorksoutsInRange: ", res);

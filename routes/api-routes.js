@@ -8,12 +8,25 @@ module.exports = (app) => {
         // res.json(dbWorkout);
     });
 
-    app.put('/api/workouts', (req, res) => {
-
+    // PUT from addExercise() in api.js
+    app.put('/api/workouts/:id', ({ body }, res) => {
+        console.log("Incoming request /api/workouts/:id: ", body);
+        db.Exercise.create(body)
+            // Find the Workout that matches the id in the URL 
+            // Then push exercise onto Exercise array
+            // new: true - always create a new one
+            .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
+            .then(dbWorkout => {
+                res.json(dbWorkout);
+            })
+            .catch(err => {
+                res.json(err);
+            });
     });
 
-    // POST from createWorkout() in exercise.js
+    // POST from createWorkout() in api.js
     app.post('/api/workouts', ({ body }, res) => {
+        console.log("Incoming request /api/workouts: ", body);
         db.Workout.create(body)
             .then(dbWorkout => {
                 console.log("New workout created: ", dbWorkout);
