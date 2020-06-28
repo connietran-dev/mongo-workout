@@ -1,3 +1,4 @@
+/** Selectors **/
 const workoutTypeSelect = document.querySelector("#type");
 const cardioForm = document.querySelector(".cardio-form");
 const resistanceForm = document.querySelector(".resistance-form");
@@ -18,7 +19,35 @@ let workoutType = null;
 let shouldNavigateAway = false;
 
 
-/** Create a Workout if it does not yet exist **/ 
+/** Event Listeners **/
+
+document
+  .querySelectorAll("input")
+  .forEach(element => element.addEventListener("input", validateInputs));
+
+// When Exercise Type dropdown changes to non-null value (Resistance or Cardio), change form fields and validateInputs
+if (workoutTypeSelect) {
+  workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
+}
+
+// If Complete button is enabled, when clicked, set shouldNavigateAway to true and submit form
+if (completeButton) {
+  completeButton.addEventListener("click", function (event) {
+    shouldNavigateAway = true;
+    handleFormSubmit(event);
+  });
+}
+// After submitting form and end of toast's animation, set location.href = "/" to redirect to homepage, because shouldNavigateAway = true
+toast.addEventListener("animationend", handleToastAnimationEnd);
+
+if (addButton) {
+  addButton.addEventListener("click", handleFormSubmit);
+}
+
+
+/** Main Functions **/
+
+/** Create Workout if it does not yet exist **/
 
 async function initExercise() {
   let workout;
@@ -42,8 +71,37 @@ async function initExercise() {
 initExercise();
 
 
+/** Create Exercise on Submit**/
+
+async function handleFormSubmit(event) {
+  event.preventDefault();
+
+  let workoutData = {};
+
+  if (workoutType === "cardio") {
+    workoutData.type = "cardio";
+    workoutData.name = cardioNameInput.value.trim();
+    workoutData.distance = Number(distanceInput.value.trim());
+    workoutData.duration = Number(durationInput.value.trim());
+  } else if (workoutType === "resistance") {
+    workoutData.type = "resistance";
+    workoutData.name = nameInput.value.trim();
+    workoutData.weight = Number(weightInput.value.trim());
+    workoutData.sets = Number(setsInput.value.trim());
+    workoutData.reps = Number(repsInput.value.trim());
+    workoutData.duration = Number(resistanceDurationInput.value.trim());
+  }
+
+  // Call addExercise with workoutData object created
+  await API.addExercise(workoutData);
+  clearInputs();
+  toast.classList.add("success");
+}
+
+
 /** Form Functions **/
 
+// Change form fields based on Exercise Type (Resistance or Cardio)
 function handleWorkoutTypeChange(event) {
   workoutType = event.target.value;
 
@@ -62,6 +120,8 @@ function handleWorkoutTypeChange(event) {
 }
 
 function validateInputs() {
+  // Set isValid to true by default
+  // If any of the form fields are blank, set isValid to false
   let isValid = true;
 
   if (workoutType === "resistance") {
@@ -98,6 +158,7 @@ function validateInputs() {
     }
   }
 
+  // If isValid is still true, keep Complete and Add Exercise buttons enabled
   if (isValid) {
     completeButton.removeAttribute("disabled");
     addButton.removeAttribute("disabled");
@@ -105,33 +166,6 @@ function validateInputs() {
     completeButton.setAttribute("disabled", true);
     addButton.setAttribute("disabled", true);
   }
-}
-
-
-/** Create new Exercise on Submit**/
-
-async function handleFormSubmit(event) {
-  event.preventDefault();
-
-  let workoutData = {};
-
-  if (workoutType === "cardio") {
-    workoutData.type = "cardio";
-    workoutData.name = cardioNameInput.value.trim();
-    workoutData.distance = Number(distanceInput.value.trim());
-    workoutData.duration = Number(durationInput.value.trim());
-  } else if (workoutType === "resistance") {
-    workoutData.type = "resistance";
-    workoutData.name = nameInput.value.trim();
-    workoutData.weight = Number(weightInput.value.trim());
-    workoutData.sets = Number(setsInput.value.trim());
-    workoutData.reps = Number(repsInput.value.trim());
-    workoutData.duration = Number(resistanceDurationInput.value.trim());
-  }
-
-  await API.addExercise(workoutData);
-  clearInputs();
-  toast.classList.add("success");
 }
 
 function handleToastAnimationEnd() {
@@ -151,21 +185,3 @@ function clearInputs() {
   resistanceDurationInput.value = "";
   weightInput.value = "";
 }
-
-if (workoutTypeSelect) {
-  workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
-}
-if (completeButton) {
-  completeButton.addEventListener("click", function (event) {
-    shouldNavigateAway = true;
-    handleFormSubmit(event);
-  });
-}
-if (addButton) {
-  addButton.addEventListener("click", handleFormSubmit);
-}
-toast.addEventListener("animationend", handleToastAnimationEnd);
-
-document
-  .querySelectorAll("input")
-  .forEach(element => element.addEventListener("input", validateInputs));
