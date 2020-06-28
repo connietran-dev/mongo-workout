@@ -1,6 +1,7 @@
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
   console.log("Last workout:", lastWorkout);
+  // If lastWorkout exists, set exercise link to lastWorkout._id
   if (lastWorkout) {
     document
       .querySelector("a[href='/exercise?']")
@@ -17,9 +18,10 @@ async function initWorkout() {
   } else {
     renderNoWorkoutText()
   }
-}
+};
 
 function tallyExercises(exercises) {
+  // reduce() array to single value and execute provided function for each value of the array
   const tallied = exercises.reduce((acc, curr) => {
     if (curr.type === "resistance") {
       acc.totalWeight = (acc.totalWeight || 0) + curr.weight;

@@ -6,9 +6,11 @@ mongoose.connect("mongodb://localhost/workout", {
   useFindAndModify: false
 });
 
+// I've commented out some of the seeds to create fewer records
+// This helps reduce noise in order to see actual records created from the app
 let workoutSeed = [
   {
-    day: new Date().setDate(new Date().getDate()-10),
+    day: new Date().setDate(new Date().getDate() - 10),
     exercises: [
       {
         type: "resistance",
@@ -20,34 +22,34 @@ let workoutSeed = [
       }
     ]
   },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 9),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Lateral Pull",
+  //       duration: 20,
+  //       weight: 300,
+  //       reps: 10,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 8),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Push Press",
+  //       duration: 25,
+  //       weight: 185,
+  //       reps: 8,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
   {
-    day: new Date().setDate(new Date().getDate()-9),
-    exercises: [
-      {
-        type: "resistance",
-        name: "Lateral Pull",
-        duration: 20,
-        weight: 300,
-        reps: 10,
-        sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-8),
-    exercises: [
-      {
-        type: "resistance",
-        name: "Push Press",
-        duration: 25,
-        weight: 185,
-        reps: 8,
-        sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-7),
+    day: new Date().setDate(new Date().getDate() - 7),
     exercises: [
       {
         type: "cardio",
@@ -57,61 +59,80 @@ let workoutSeed = [
       }
     ]
   },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 6),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Bench Press",
+  //       duration: 20,
+  //       weight: 285,
+  //       reps: 10,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 5),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Bench Press",
+  //       duration: 20,
+  //       weight: 300,
+  //       reps: 10,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 4),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Quad Press",
+  //       duration: 30,
+  //       weight: 300,
+  //       reps: 10,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 3),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Bench Press",
+  //       duration: 20,
+  //       weight: 300,
+  //       reps: 10,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
+  // {
+  //   day: new Date().setDate(new Date().getDate() - 2),
+  //   exercises: [
+  //     {
+  //       type: "resistance",
+  //       name: "Military Press",
+  //       duration: 20,
+  //       weight: 300,
+  //       reps: 10,
+  //       sets: 4
+  //     }
+  //   ]
+  // },
   {
-    day: new Date().setDate(new Date().getDate()-6),
+    day: new Date().setDate(new Date().getDate() - 1),
     exercises: [
       {
         type: "resistance",
-        name: "Bench Press",
-        duration: 20,
-        weight: 285,
-        reps: 10,
-        sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-5),
-    exercises: [
-      {
-        type: "resistance",
-        name: "Bench Press",
-        duration: 20,
-        weight: 300,
-        reps: 10,
-        sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-4),
-    exercises: [
-      {
-        type: "resistance",
-        name: "Quad Press",
+        name: "Bench",
         duration: 30,
-        weight: 300,
-        reps: 10,
-        sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-3),
-    exercises: [
-      {
-        type: "resistance",
-        name: "Bench Press",
-        duration: 20,
-        weight: 300,
-        reps: 10,
-        sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-2),
-    exercises: [
+        distance: 2
+      },
       {
         type: "resistance",
         name: "Military Press",
@@ -119,17 +140,6 @@ let workoutSeed = [
         weight: 300,
         reps: 10,
         sets: 4
-      }
-    ]
-  },
-  {
-    day: new Date().setDate(new Date().getDate()-1),
-    exercises: [
-      {
-        type: "resistance",
-        name: "Bench",
-        duration: 30,
-        distance: 2
       }
     ]
   }

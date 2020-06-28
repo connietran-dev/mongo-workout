@@ -20,10 +20,16 @@ let shouldNavigateAway = false;
 async function initExercise() {
   let workout;
 
+  console.log('Query string: ', location.search.split("=")[1]);
+
+  // If workout does not yet exist, create a new workout
   if (location.search.split("=")[1] === undefined) {
-    workout = await API.createWorkout()
-    console.log(workout)
+    workout = await API.createWorkout();
+    console.log("Response from createWorkout: ", workout);
   }
+
+  // If workout exists, set query string to workout_id which will reload page with that id
+  console.log("workout: ", workout);
   if (workout) {
     location.search = "?id=" + workout._id;
   }
