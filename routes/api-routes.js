@@ -1,6 +1,11 @@
 const db = require("../models");
+const mongoose = require("mongoose");
+
+// Because findOneAndUpdate is deprecated, opt in to using MongoDB driver's findOneAndUpdate() function using the useFindAndModify global option
+mongoose.set('useFindAndModify', false);
 
 module.exports = (app) => {
+
     // fetch from getLastWorkout()
     app.get('/api/workouts', async (req, res) => {
         // let dbWorkout = await db.Workout.find({});
@@ -9,17 +14,24 @@ module.exports = (app) => {
     });
 
     // PUT from addExercise() in api.js
-    app.put('/api/workouts/:id', ({ body }, res) => {
-        console.log("Incoming request /api/workouts/:id: ", body);
-        db.Exercise.create(body)
-            // Find the Workout that matches the id in the URL 
-            // Then push exercise onto Exercise array
-            // new: true - always create a new one
-            .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { exercises: _id } }, { new: true }))
+    app.put('/api/workouts/:id', (req, res) => {
+        console.log("Incoming request /api/workouts/:id: ", req.body);
+        // Find the Workout that matches the id in the URL 
+        // Then push exercise onto Exercise array
+        // new: true - always create a new one
+        db.Exercise.create(req.body)
+            .then(dbExercise => {
+                console.log("Exercise added: ", dbExercise);
+                let workoutId = req.params.id;
+                console.log("Current workout: ", workoutId);
+                return db.Workout.findOneAndUpdate({ _id: workoutId }, { $push: { exercises: dbExercise._id } }, { new: true })
+            })
             .then(dbWorkout => {
+                console.log("Updated workout: ", dbWorkout);
                 res.json(dbWorkout);
             })
             .catch(err => {
+                console.log("Error: ", err);
                 res.json(err);
             });
     });
