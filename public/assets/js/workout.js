@@ -9,10 +9,17 @@ async function initWorkout() {
       .querySelector("a[href='/exercise?']")
       .setAttribute("href", `/exercise?id=${lastWorkout._id}`);
 
+    // Calculate totalDuration from duration in exercises array:
+    let calcDuration = 0;
+    lastWorkout.exercises.forEach(exercise => {
+      calcDuration += exercise.duration;
+      console.log(calcDuration);
+    });
+    
     // For the workoutSummary, display: date, total duration, number of exercises, total weight, total sets, total reps, and total distance by tallying exercises
     const workoutSummary = {
       date: formatDate(lastWorkout.day),
-      totalDuration: lastWorkout.totalDuration,
+      totalDuration: calcDuration,
       numExercises: lastWorkout.exercises.length,
       ...tallyExercises(lastWorkout.exercises)
     };
