@@ -1,12 +1,15 @@
+// If lastWorkout exists, set exercise link to lastWorkout._id
+// Otherwise, display NoWorkoutText
 async function initWorkout() {
   const lastWorkout = await API.getLastWorkout();
-  console.log("Last workout:", lastWorkout);
-  // If lastWorkout exists, set exercise link to lastWorkout._id
+  console.log("Last workout (workout.js):", lastWorkout);
+  
   if (lastWorkout) {
     document
       .querySelector("a[href='/exercise?']")
       .setAttribute("href", `/exercise?id=${lastWorkout._id}`);
 
+    // For the workoutSummary, display: date, total duration, number of exercises, total weight, total sets, total reps, and total distance by tallying exercises
     const workoutSummary = {
       date: formatDate(lastWorkout.day),
       totalDuration: lastWorkout.totalDuration,

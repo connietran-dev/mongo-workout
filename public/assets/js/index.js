@@ -2,13 +2,13 @@ init();
 
 async function init() {
   // location.search = return the querystring part of a URL, e.g., after ?
-  // If there is no location.search, then getLastWorkout()
   console.log('location.search.split("=")[1]: ', location.search.split("=")[1]);
-  // If a workout does not exist, then retrieve the last workout
+  
+  // If there is no location.search, then getLastWorkout()
   if (location.search.split("=")[1] === undefined) {
     // getLastWorkout in api.js
     const workout = await API.getLastWorkout();
-    console.log("Last workout: ", workout);
+    console.log("Last workout (index.js): ", workout);
     
     // Otherwise, if workout does exist, add to query string
     if (workout) {

@@ -7,33 +7,39 @@ mongoose.set('useFindAndModify', false);
 module.exports = (app) => {
 
     // fetch from getLastWorkout()
-    app.get('/api/workouts', async (req, res) => {
-        // let dbWorkout = await db.Workout.find({});
-        // console.log(dbWorkout);
-        // res.json(dbWorkout);
+    app.get("/api/workouts", (req, res) => {
+        db.Workout.find()
+            .then(dbWorkout => {
+                console.log("All dbWorkouts: ", dbWorkout);
+                res.json(dbWorkout);
+            })
+            .catch(err => {
+                console.log("Error GET /api/workouts: ", err);
+                res.json(err);
+            });
     });
 
     // PUT from addExercise() in api.js
     app.put('/api/workouts/:id', (req, res) => {
-        console.log("Incoming request /api/workouts/:id: ", req.body);
+        
         // Find the Workout that matches the id in the URL 
         // Then push exercise onto Exercise array
         // new: true - always create a new one
-        db.Exercise.create(req.body)
-            .then(dbExercise => {
-                console.log("Exercise added: ", dbExercise);
-                let workoutId = req.params.id;
-                console.log("Current workout: ", workoutId);
-                return db.Workout.findOneAndUpdate({ _id: workoutId }, { $push: { exercises: dbExercise._id } }, { new: true })
-            })
-            .then(dbWorkout => {
-                console.log("Updated workout: ", dbWorkout);
-                res.json(dbWorkout);
-            })
-            .catch(err => {
-                console.log("Error: ", err);
-                res.json(err);
-            });
+        // findByIdAndUpdate() method returns the object that matched the condition before the update operation
+
+        db.Workout.findByIdAndUpdate(
+            { _id: req.params.id },
+            { $push: { exercises: req.body } },
+            function (err, result) {
+                if (err) {
+                    console.log("Error: ", err);
+                    res.send(err);
+                } else {
+                    console.log("Updated dbWorkout: ", result);
+                    res.send(result);
+                }
+            }
+        );
     });
 
     // POST from createWorkout() in api.js
@@ -45,7 +51,7 @@ module.exports = (app) => {
                 res.json(dbWorkout);
             })
             .catch(({ message }) => {
-                console.log(message);
+                console.log("Error POST /api/workouts", message);
             });
     });
 
