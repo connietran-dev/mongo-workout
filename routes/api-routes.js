@@ -6,12 +6,12 @@ mongoose.set('useFindAndModify', false);
 
 module.exports = (app) => {
 
-    // fetch from getLastWorkout()
+    /** Get All Workouts **/
     app.get("/api/workouts", (req, res) => {
         db.Workout.find()
-            .then(dbWorkout => {
-                console.log("All dbWorkouts: ", dbWorkout);
-                res.json(dbWorkout);
+            .then(dbWorkouts => {
+                console.log("All dbWorkouts: ", dbWorkouts);
+                res.json(dbWorkouts);
             })
             .catch(err => {
                 console.log("Error GET /api/workouts: ", err);
@@ -19,9 +19,24 @@ module.exports = (app) => {
             });
     });
 
+    /** Create New Workout **/
+    // POST from createWorkout() in api.js
+    app.post('/api/workouts', ({ body }, res) => {
+        console.log("Incoming request /api/workouts: ", body);
+        db.Workout.create(body)
+            .then(dbWorkout => {
+                console.log("New workout created: ", dbWorkout);
+                res.json(dbWorkout);
+            })
+            .catch(({ message }) => {
+                console.log("Error POST /api/workouts", message);
+            });
+    });
+
+    /** Add New Exercise to Workout **/
     // PUT from addExercise() in api.js
     app.put('/api/workouts/:id', (req, res) => {
-        
+
         // Find the Workout that matches the id in the URL 
         // Then push exercise onto Exercise array
         // new: true - always create a new one
@@ -40,22 +55,5 @@ module.exports = (app) => {
                 }
             }
         );
-    });
-
-    // POST from createWorkout() in api.js
-    app.post('/api/workouts', ({ body }, res) => {
-        console.log("Incoming request /api/workouts: ", body);
-        db.Workout.create(body)
-            .then(dbWorkout => {
-                console.log("New workout created: ", dbWorkout);
-                res.json(dbWorkout);
-            })
-            .catch(({ message }) => {
-                console.log("Error POST /api/workouts", message);
-            });
-    });
-
-    app.get('/api/workouts/range', (req, res) => {
-
     });
 };

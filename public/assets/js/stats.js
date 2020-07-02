@@ -1,44 +1,43 @@
-// get all workout data from back-end
-fetch("/api/workouts/range")
+// Get all workout data from back-end
+
+// Instead of using a separate /api/workouts/range call, I have simplified and am using the same app.get route to fetch all workout data
+// I then manipulate and transform the data on the client-side
+
+fetch("/api/workouts")
   .then(response => {
+    console.log("/api/workouts/range response (stats.js): ", response);
     return response.json();
   })
   .then(data => {
+    console.log("Chart data (All workouts): ", data);
     populateChart(data);
   });
 
-
-API.getWorkoutsInRange()
-
-function generatePalette() {
-  const arr = [
-    "#003f5c",
-    "#2f4b7c",
-    "#665191",
-    "#a05195",
-    "#d45087",
-    "#f95d6a",
-    "#ff7c43",
-    "ffa600",
-    "#003f5c",
-    "#2f4b7c",
-    "#665191",
-    "#a05195",
-    "#d45087",
-    "#f95d6a",
-    "#ff7c43",
-    "ffa600"
-  ]
-
-  return arr;
-}
+// I also commented this function out because of the same reasons in the comments above. It was also a duplicate of the fetch("/api/workouts/range") that was previously declared above 
+// API.getWorkoutsInRange()
 
 function populateChart(data) {
+
+  // Calculate dates of workouts to dynamically display x-axis based on dates of workouts
+  // The previous code hard-coded "Sunday" through "Saturday"
+  let workoutDates = calcWorkoutDates(data);
+  console.log("workoutDates: ", workoutDates);
+
+  // I modified the original function to ensure we get the totalDuration of each *workout* as a separate point in the line graph
+  // The original duration() function returned the duration of each *exercise*
   let durations = duration(data);
+  console.log("Total durations for each workout: ", durations);
+
+  let resistanceWorkouts = getResistanceWorkouts(data);
+  console.log("Resistance workouts: ", resistanceWorkouts);
+
   let pounds = calculateTotalWeight(data);
-  let workouts = workoutNames(data);
+  console.log("Total pounds for each exercise: ", pounds);
+
   const colors = generatePalette();
 
+  // Line graph, bar graph, and 2 pie charts for canvas, canvas2, 3, 4, respectively
+  // .getContext draws on the <canvas> element in the HTML
   let line = document.querySelector("#canvas").getContext("2d");
   let bar = document.querySelector("#canvas2").getContext("2d");
   let pie = document.querySelector("#canvas3").getContext("2d");
@@ -47,20 +46,12 @@ function populateChart(data) {
   let lineChart = new Chart(line, {
     type: "line",
     data: {
-      labels: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-      ],
+      labels: workoutDates,
       datasets: [
         {
           label: "Workout Duration In Minutes",
-          backgroundColor: "red",
-          borderColor: "red",
+          backgroundColor: "#FF7C42",
+          borderColor: "#FF7C42",
           data: durations,
           fill: false
         }
@@ -69,7 +60,8 @@ function populateChart(data) {
     options: {
       responsive: true,
       title: {
-        display: true
+        display: true,
+        text: "Total Duration (min)"
       },
       scales: {
         xAxes: [
@@ -77,6 +69,11 @@ function populateChart(data) {
             display: true,
             scaleLabel: {
               display: true
+            },
+            ticks: {
+              autoSkip: false,
+              maxRotation: 90,
+              minRotation: 45
             }
           }
         ],
@@ -85,7 +82,8 @@ function populateChart(data) {
             display: true,
             scaleLabel: {
               display: true
-            }
+            },
+            stepSize: 10
           }
         ]
       }
@@ -95,15 +93,7 @@ function populateChart(data) {
   let barChart = new Chart(bar, {
     type: "bar",
     data: {
-      labels: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-      ],
+      labels: workoutDates,
       datasets: [
         {
           label: "Pounds",
@@ -131,7 +121,7 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Pounds Lifted"
+        text: "Pounds Lifted per Workout"
       },
       scales: {
         yAxes: [
@@ -148,10 +138,10 @@ function populateChart(data) {
   let pieChart = new Chart(pie, {
     type: "pie",
     data: {
-      labels: workouts,
+      labels: resistanceWorkouts,
       datasets: [
         {
-          label: "Excercises Performed",
+          label: "Minutes",
           backgroundColor: colors,
           data: durations
         }
@@ -160,7 +150,7 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Excercises Performed"
+        text: "Total Minutes per Cardio Exercise"
       }
     }
   });
@@ -168,11 +158,11 @@ function populateChart(data) {
   let donutChart = new Chart(pie2, {
     type: "doughnut",
     data: {
-      labels: workouts,
+      labels: resistanceWorkouts,
       datasets: [
         {
-          label: "Excercises Performed",
-          backgroundColor: colors,
+          label: "Pounds",
+          backgroundColor: colors.reverse(),
           data: pounds
         }
       ]
@@ -180,19 +170,36 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Excercises Performed"
+        text: "Total Pounds per Resistance Exercise"
       }
     }
   });
 }
 
-function duration(data) {
-  let durations = [];
+function calcWorkoutDates(data) {
+  let workoutDates = [];
 
   data.forEach(workout => {
+    let formattedDate = moment(workout.day).format('lll');
+    workoutDates.push(formattedDate);
+  });
+
+  return workoutDates;
+};
+
+function duration(workouts) {
+  let durations = [];
+
+  // For each workout
+  workouts.forEach(workout => {
+    let calcDuration = 0;
+    // Take each exercise within each workout
     workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
+      // Add each exercise duration to get the totalDuration(calcDuration) for that workout
+      calcDuration += exercise.duration;
     });
+    // Then push the totalDuration for that workout onto durations array to render the chart
+    durations.push(calcDuration);
   });
 
   return durations;
@@ -201,23 +208,54 @@ function duration(data) {
 function calculateTotalWeight(data) {
   let total = [];
 
+  // For each workout
   data.forEach(workout => {
+    // For each exercise, if the exercise is resistance, add the weight for pounds
     workout.exercises.forEach(exercise => {
-      total.push(exercise.weight);
+      if (exercise.type === "resistance") {
+        total.push(exercise.weight);
+      }
     });
   });
 
   return total;
 }
 
-function workoutNames(data) {
+function getResistanceWorkouts(data) {
   let workouts = [];
 
+  // For each workout
   data.forEach(workout => {
+    // For each exercise, if that exercise.type is resistance, then push the exercise name onto the workouts array
     workout.exercises.forEach(exercise => {
-      workouts.push(exercise.name);
+      if (exercise.type === "resistance") {
+        workouts.push(exercise.name);
+      }
     });
   });
 
   return workouts;
+}
+
+function generatePalette() {
+  const arr = [
+    "#003f5c",
+    "#2f4b7c",
+    "#665191",
+    "#a05195",
+    "#d45087",
+    "#f95d6a",
+    "#ff7c43",
+    "ffa600",
+    "#003f5c",
+    "#2f4b7c",
+    "#665191",
+    "#a05195",
+    "#d45087",
+    "#f95d6a",
+    "#ff7c43",
+    "ffa600"
+  ]
+
+  return arr;
 }
