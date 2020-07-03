@@ -1,45 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
-    <title>Fitness Chart</title>
-  </head>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/chart-style.css" />
+  <!-- Change from Bootstrap to Semantic UI to be consistent with other pages -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+  <title>Fitness Chart</title>
+</head>
+
+<body>
+  <!-- Move <nav> into body to be consistent with other pages -->
   <nav>
     <a href="/">Fitness Tracker</a>
   </nav>
-  <body>
-    <div class="container mt">
-      <h1 class="text-center">Workout Dashboard</h1>
-      <div class="row mt">
-        <div class="col-md-6">
-          <canvas id="canvas"></canvas>
-        </div>
-        <div class="col-md-6">
-          <canvas id="canvas2"></canvas>
-        </div>
+  <div class="wrapper workout">
+    <h1 class="ui header center aligned stats-header">Workout Dashboard</h1>
+    <div class="ui two column grid container workout">
+      <div class="column">
+        <canvas id="canvas"></canvas>
       </div>
-      <div class="row mt">
-        <div class="col-md-6">
-          <canvas id="canvas3"></canvas>
-        </div>
-        <div class="col-md-6">
-          <canvas id="canvas4"></canvas>
-        </div>
+      <div class="column">
+        <canvas id="canvas2"></canvas>
+      </div>
+      <div class="column">
+        <canvas id="canvas3"></canvas>
+      </div>
+      <div class="column">
+        <canvas id="canvas4"></canvas>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <!-- Add Moment.js to format dates -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <script src="/assets/js/api.js"></script>
-    <script src="/assets/js/stats.js"></script>
-  </body>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <!-- Add Moment.js to format dates -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/stats.js"></script>
+</body>
+
 </html>

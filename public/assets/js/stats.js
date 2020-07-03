@@ -89,6 +89,7 @@ function populateChart(data) {
         display: true,
         text: "Total Duration per Workout (min)"
       },
+      maintainAspectRatio: false,
       scales: {
         xAxes: [
           {
@@ -151,6 +152,7 @@ function populateChart(data) {
         display: true,
         text: "Pounds Lifted per Workout"
       },
+      maintainAspectRatio: false,
       scales: {
         yAxes: [
           {
@@ -181,7 +183,8 @@ function populateChart(data) {
       title: {
         display: true,
         text: "Total Minutes per Cardio Exercise"
-      }
+      },
+      maintainAspectRatio: false
     }
   });
 
@@ -203,7 +206,8 @@ function populateChart(data) {
       title: {
         display: true,
         text: "Total Pounds per Resistance Exercise"
-      }
+      },
+      maintainAspectRatio: false
     }
   });
 }

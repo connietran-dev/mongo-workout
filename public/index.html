@@ -12,7 +12,7 @@
 
 <body>
   <nav>
-    <a href="/">Fitness Tracker</a>
+    <a href="/">Fitness Tracker | </a>
     <a href="/stats">Dashboard</a>
   </nav>
   <div class="wrapper workout">
@@ -26,8 +26,8 @@
           <div>
             <div class="workout-stats"></div>
             <div class="buttons">
-              <a id="continue-btn" href="/exercise?" class="huge ui blue button">Continue Workout</a>
-              <a href="/exercise" class="huge positive ui button">New Workout</a>
+              <a id="continue-btn" href="/exercise?" class="huge ui positive button">Continue Workout</a>
+              <a href="/exercise" class="huge blue ui button">New Workout</a>
             </div>
           </div>
         </div>
@@ -41,6 +41,8 @@
   <div id="toast">
     Workout Added Successfully!
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
   <!-- Move js and css files into /assets folder -->
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/workout.js"></script>
