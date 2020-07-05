@@ -97,6 +97,8 @@ Although it was a bit strenuous to customize the stats page in this way, I found
 
 * I commented out some of the seeds in `seed.js` to create fewer records. This helps reduce noise in order to see actual records created from the app.
 
+* I have renamed my master branch to `main` in support of a more inclusive term and in opposition of racially insensitive programming terminology. I had help changing mine with thanks to [Scott Hanselman](https://www.hanselman.com/blog/EasilyRenameYourGitDefaultBranchFromMasterToMain.aspx). You can read more on GitHub's changes [here](https://gizmodo.com/github-to-remove-master-and-slave-coding-terms-widely-s-1844041329).
+
 
 ## Insights
 
